@@ -19,7 +19,7 @@ def remv():
     return filtered_words
 
 def rand(val):
-    if random.randint(0, 100) <= val:
+    if random.randint(1, 100) <= val:
         return True
     else:
         return False
@@ -49,12 +49,25 @@ def find_word(words, letters):
 
     count = 0
     while True:
-        
+        count = 0
+        if rand(100 + (3 * 3) - (len(word) * 3) + (num_valid_words * 8)):
+            while True:
+                new_pos = [random.randint(0,3), random.randint(0,3)]
+                if abs(new_pos[0] - int(pos[count][0])) <= 1 and abs(new_pos[1] - int(pos[count][1])) <= 1 and len(list(dict.fromkeys(pos.append(new_pos)))) == len(pos):
+                    pos.append(new_pos)
+                    word = word + letters[new_pos[0]][new_pos[1]]
+                    break
+            
+            if len(word) >= 4 and word in words:
+                num_valid_words += 1
+                valid_words.append(word)
+                
+                #if rand(90):
+                #    pass
+                #else:
+                #    break
 
-        neighbors = find_neighbors(pos, count)
-        #st.write(neighbors, count)
-        if len(neighbors) > 0:
-            pos.append(random.choice(neighbors))
+            count += 1
         else:
             break
 
@@ -75,28 +88,22 @@ def find_word(words, letters):
 
 def search(words, runtime, letters):
     #st.write(letters)
-
     start_time = t.time()
     valid_words = []
-    time_left = st.empty()
     while (t.time() - start_time) < runtime:
-        time_left.write(f"Time left: {round(runtime - t.time() + start_time, 1)}")
         val = find_word(words, letters)
         if val not in valid_words:
             valid_words.append(val)
         #st.write("SEARCHING")
         #t.sleep(1)
-
-    if None in valid_words:
-        valid_words.remove(None)
     
-    st.write(sorted(valid_words, key=len, reverse=True))
+    st.write(valid_words)
     
 
 def main():
     st.title("Word Hunt Bot")
 
-    words = remv()
+    words = set(remv())
 
     #st.write(words)
     NULL = 0
